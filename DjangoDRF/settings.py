@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Local app
     'home.apps.HomeConfig',
+    'accounts.apps.AccountsConfig',
     # Third-party app
     'rest_framework',
 ]
