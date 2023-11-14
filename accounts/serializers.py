@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
+
 from accounts import validators
 
 
@@ -12,6 +14,20 @@ class UserRegisterSerializer(serializers.Serializer):
         if value == 'admin':
             raise serializers.ValidationError('username cant be admin')
         return value
+
+    def validate(self, data):
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError('password must match')
+        return data
+
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(required=True, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'confirm_password']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, data):
         if data['password'] != data['confirm_password']:
