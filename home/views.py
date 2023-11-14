@@ -4,4 +4,9 @@ from rest_framework.views import APIView
 
 class Home(APIView):
     def get(self, request):
-        return Response({'msg': 'hello word'})
+        name = request.query_params.get('name', 'world')
+        return Response({'msg': f'hello {name}'})
+
+    def post(self, request):
+        name = request.data.get('name', 'world')
+        return Response({'msg': f'hello {name}'})
