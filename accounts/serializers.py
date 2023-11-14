@@ -33,3 +33,16 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError('password must match')
         return data
+
+    def create(self, validated_data):
+        del validated_data['confirm_password']
+        return User.objects.create_user(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        instance.set_password(validated_data.get('password', instance.password))
+
+        instance.save()
+
+        return instance
