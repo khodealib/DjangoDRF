@@ -27,12 +27,14 @@ class PersonView(APIView):
         return Response(data=serializer.data)
 
 
-class QuestionView(APIView):
+class QuestionListView(APIView):
     def get(self, request):
         questions = Question.objects.all()
         serializer = QuestionSerializer(instance=questions, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+
+class QuestionCreateView(APIView):
     def post(self, request):
         serializer = QuestionSerializer(data=request.data)
         if serializer.is_valid():
@@ -40,6 +42,8 @@ class QuestionView(APIView):
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class QuestionUpdate(APIView):
     def put(self, request, pk):
         question = get_object_or_404(Question, pk=pk)
         serializer = QuestionSerializer(instance=question, data=request.data, partial=True)
@@ -48,6 +52,8 @@ class QuestionView(APIView):
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class QuestionDeleteView(APIView):
     def delete(self, request, pk):
         question = get_object_or_404(Question, pk=pk)
         question.delete()
