@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from home.models import Question, Answer
 from home.custom_relational_fields import UserEmailNameRelationalField
+from home.models import Question, Answer
 
 
 class PersonSerializer(serializers.Serializer):
