@@ -29,6 +29,8 @@ class PersonView(APIView):
 
 
 class QuestionListView(APIView):
+    throttle_scope = 'question'
+
     def get(self, request):
         questions = Question.objects.all()
         serializer = QuestionSerializer(instance=questions, many=True)
@@ -60,7 +62,7 @@ class QuestionUpdate(APIView):
 
 
 class QuestionDeleteView(APIView):
-    permission_classes = (IsOwnerOrReadOnly, )
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def delete(self, request, pk):
         question = get_object_or_404(Question, pk=pk)
