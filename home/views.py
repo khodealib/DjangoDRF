@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from home.models import Person, Question
 from home.serializers import PersonSerializer, QuestionSerializer
+from permissions import IsOwnerOrReadOnly
 
 
 class Home(APIView):
@@ -46,8 +47,11 @@ class QuestionCreateView(APIView):
 
 
 class QuestionUpdate(APIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+
     def put(self, request, pk):
         question = get_object_or_404(Question, pk=pk)
+        self.check_object_permissions(request, question)
         serializer = QuestionSerializer(instance=question, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -56,6 +60,8 @@ class QuestionUpdate(APIView):
 
 
 class QuestionDeleteView(APIView):
+    permission_classes = (IsOwnerOrReadOnly, )
+
     def delete(self, request, pk):
         question = get_object_or_404(Question, pk=pk)
         question.delete()
