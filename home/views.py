@@ -1,8 +1,10 @@
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 
 from home.models import Person, Question
 from home.serializers import PersonSerializer, QuestionSerializer
@@ -28,12 +30,15 @@ class PersonView(APIView):
         return Response(data=serializer.data)
 
 
-class QuestionListView(APIView):
+class QuestionListView(GenericAPIView):
     throttle_scope = 'question'
+    pagination_class = PageNumberPagination
+    serializer_class = QuestionSerializer
 
     def get(self, request):
         questions = Question.objects.all()
-        serializer = QuestionSerializer(instance=questions, many=True)
+        paginate_questions = self.pagination_class().paginate_queryset(questions, request)
+        serializer = self.serializer_class(instance=paginate_questions, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 

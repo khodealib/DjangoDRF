@@ -135,11 +135,12 @@ REST_FRAMEWORK = {
         'question': '20/minute'
     },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 1,
 }
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Shop REST',
-    'DESCRIPTION': 'first rest app',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
